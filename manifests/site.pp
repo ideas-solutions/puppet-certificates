@@ -412,12 +412,20 @@ define certificates::site (
       require        => File[$cert_path],
       notify         => $service_notify,
     }
-
-    concat::fragment { "${cert}_certificate":
-      target  => "${name}_cert_merged",
-      source  => $cert_source,
-      content => $cert_content,
-      order   => '01',
+    if ('ENC[' in $cert_content) {
+      concat::fragment { "${cert}_certificate":
+        target  => "${name}_cert_merged",
+        source  => $cert_source,
+        content => lookup($cert_content,String),
+        order   => '01',
+      }
+    } else {
+      concat::fragment { "${cert}_certificate":
+        target  => "${name}_cert_merged",
+        source  => $cert_source,
+        content => $cert_content,
+        order   => '01',
+      }
     }
 
     if ($merge_key) {
