@@ -416,7 +416,7 @@ define certificates::site (
       concat::fragment { "${cert}_certificate":
         target  => "${name}_cert_merged",
         source  => $cert_source,
-        content => lookup($cert_content,String),
+        content => decrypt_certs($cert_content),
         order   => '01',
       }
     } else {
