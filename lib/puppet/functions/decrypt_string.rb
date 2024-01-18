@@ -1,6 +1,6 @@
 
 Puppet::Functions.create_function(:decrypt_string) do
-    dispatch :figlet do
+    dispatch :create_function do
       param 'String', :input_string
       return_type 'String'
     end
